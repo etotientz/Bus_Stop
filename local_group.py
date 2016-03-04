@@ -5,72 +5,41 @@ from lib import *
 
 
 
-trailpoint=[]
+temp=[]
+local_group_data=[]
+local_group_leader=[]
 
 
 
-    #def read_data(file_name):
-        """ reads the file named file_name and stores it in data_lines """
+    
 
-        input_file= open(file_name,'r')
-        temp= input_file.readlines()[1:]
-        #print temp
-
-        time_stamp = temp[0].split()[0].split(',')
-        time = [int(i) for i in time_stamp[-1].split(':')]
-        hr,minu,sec=time[0],time[1],time[2]
-	for i in temp:
-            each_line = i
-            line = each_line.split(',')
-            time_stamp = line[2].split()[0]
-            time = [int(j) for j in time_stamp.split(':')]
-            trailpoint.append(each_line)
-            
-	input_file.close()
+input_file= open(file_name,'r')
+temp= input_file.readlines()[1:]
+"""for i in temp:
+    trailpoint.append(i)
+time_stamp = temp[0].split()[0].split(',')
+time = [int(i) for i in time_stamp[-1].split(':')]
+hr,minu,sec=time[0],time[1],time[2]
+for i in temp:
+        each_line = i
+        line = each_line.split(',')
+        time_stamp = line[2].split()[0]
+        time = [int(j) for j in time_stamp.split(':')]
+        trailpoint.append(each_line)"""
         
-     """def compare_time(self,time1,time2):
-        
-        for i in xrange(0,len(time1)):
-            if(time1[i] > time2[i] ):
-                return 1
-            elif(time1[i] < time2[i] ):
-                return -1
-            else:
-                continue
-        return 0"""
-
-      def process_line(raw_data):
+     
+def process_line(raw_data):
         """ Takes a line of raw gps data and returns latitude,longitude and timestamp """
 
-        line= raw_data.split(',')
-        #print line
-        latitude, longitude, timestamp = line[0],line[1], line[2].split()[0]
-        return latitude,longitude, timestamp
+     line= raw_data.split(',')
+     latitude, longitude, timestamp = line[0],line[1], line[2].split()[0]
+     return latitude,longitude, timestamp
 
-     def get_zero_speed_data():
-        """ 
-            stores the duplicate contiguous points in a list. 
-            compare each line of gps data with the next one, group them if they are same
-            and store them in the list zero_speed_data once a different line of data has been
-            found and start a new group.
-            the list zero_speed_data contains only the first point of each group and contains
-            an additional attribute count to store the number of duplicate contiguous points present (excluding itself).
-
-            output list: latitude,longitude,timestamp,count,local_group_number
-                         where count= number of duplicate contiguous points
+def get_zero_speed_data():
         
-        """
-        #print ">",self.data_lines
         count=0
-        #get the first point from the raw trail data
-
-        if data_lines == []:
-            return
-
-        current_latitude, current_longitude, current_timestamp= process_line(data_lines[0])
-        
-        for next_line in data_lines[1:]:
-            #get the next point
+        current_latitude, current_longitude, current_timestamp= process_line(temp[0])
+        for next_line in temp[1:]:
             next_latitude, next_longitude, next_timestamp= process_line(next_line)
             #if current and next points are same, duplicate points found, increment count
             if (current_latitude,current_longitude) == (next_latitude,next_longitude):
@@ -79,7 +48,7 @@ trailpoint=[]
                 #if there is at least one additional duplicate point
                 if count>0:
                     #add the first point of the group to the zero_speed_list
-                    zero_speed_data.append([current_latitude,current_longitude,current_timestamp,count,trail_number])
+                    zero_speed_data.append([current_latitude,current_longitude,current_timestamp,count])
                     count=0 #reset count so as to mark the beginning of a new group
                 current_latitude, current_longitude, current_timestamp = next_latitude, next_longitude, next_timestamp
                 #assign the next point to be the current point, ie, it is probably the first point of a next zero-speed group
@@ -102,7 +71,7 @@ trailpoint=[]
         #for each point in the zero_speed_data list
         for each_point in zero_speed_data[1:]:
             #get distance between the current_point and each_point
-            distance= dist(float(current_point[0]),float(each_point[0]),float(current_point[1]),float(each_point[1]))
+            distance= dist(float(current_point[0]),float(current_point[1]),float(each_point[0]),,float(each_point[1]))
             
             if distance > DISTANCE_THRESHOLD:
                 #create a new group
@@ -115,7 +84,7 @@ trailpoint=[]
             current_point= each_point #assign each_point to the current_point
 
 
-        def get_local_group_leaders(self):
+        def get_local_group_leaders():
         
         """ get all of the local group leader points for all groups in a trail
             we store the group leader points for a trail in local_group_leader[]
@@ -135,7 +104,7 @@ trailpoint=[]
 
         group=[] #stores a group of points temporarily
         group_number=1
-        for each_point in self.local_group_data:
+        for each_point in local_group_data:
             #check the local group number for each point, if it is equal to  group_number append it to group
             if each_point[-1] == group_number:
                 group.append(each_point)
@@ -147,7 +116,7 @@ trailpoint=[]
                 group_number+=1 #create a new group
                 group=[] #reset group[]
                 group.append(each_point) #add the current point to the new group
-        self.local_group_data.pop() # removing the dummy variable
+            local_group_data.pop() # removing the dummy variable
 =======
  def process_line(self,raw_data,trail_number):
         """ Takes a line of raw gps data and returns latitude,longitude and timestamp """
