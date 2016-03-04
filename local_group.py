@@ -100,7 +100,7 @@ def get_zero_speed_data():
         #elements, we need to make sure that we have a dummy variable to check the last element of the list with.
         #and form the last group
         
-        self.local_group_data.append([-12])
+        local_group_data.append([-12])
 
         group=[] #stores a group of points temporarily
         group_number=1
@@ -112,11 +112,43 @@ def get_zero_speed_data():
                 #get the group leader of the current group
                 group_leader= get_group_leader(group)
                 #and append it to local_group_leader[]
-                self.local_group_leader.append(group_leader)
+                local_group_leader.append(group_leader)
                 group_number+=1 #create a new group
                 group=[] #reset group[]
                 group.append(each_point) #add the current point to the new group
             local_group_data.pop() # removing the dummy variable
+
+        def get_group_leader(group):
+        """ returns the group_leader point for a particular group of points"""
+       
+        if group == []:
+            return
+        wait_per_distance= [] #contains the summation of wait_time/distance from one point to all other point, for every point in the group
+        total_wait_time=0  #would contain the total wait time of the group, we sum up the 'count' field of all the points
+        for each_point in group:
+            wait_time= int(each_point[3])  #each_point= [latitude,longitude,timestamp,count,local_group_number]
+            temp=0   #temp would contain wait_time* (1/d1 + 1/d2 + 1/d3 + .....) where d1,d2,d3...dn are distances from one point to all other points
+            for other_point in group:
+                #get distance from each_point to other_point, d1,d2,d3.... etc
+                distance= get_spherical_distance(float(each_point[0]),float(other_point[0]),float(each_point[1]),float(other_point[1]))
+                temp+= 1/(distance+1)  # here, temp= (1/d1 + 1/d2 + 1/d3 + .....)
+            temp= wait_time*temp        #now, temp= wait_time* (1/d1 + 1/d2 + 1/d3 + ....)
+            wait_per_distance.append(temp)  #append temp to the list
+            total_wait_time+=wait_time 
+        
+        max_index=0
+
+        max_wait_per_distance= max(wait_per_distance) #get the maximum value from the list
+ 
+        #get the index of the point having maximum wait_per_distance
+        for index in xrange(0,len(wait_per_distance)):
+           if max_wait_per_distance == wait_per_distance[index]:
+               max_index= index
+               break
+
+        group[max_index][3]= total_wait_time  #replace 'count' field with total_wait_time.
+
+        return group[max_index]  #return the group leader point
 =======
  def process_line(self,raw_data,trail_number):
         """ Takes a line of raw gps data and returns latitude,longitude and timestamp """
