@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 import sys
 from lib import *
@@ -147,3 +148,12 @@ trailpoint=[]
                 group=[] #reset group[]
                 group.append(each_point) #add the current point to the new group
         self.local_group_data.pop() # removing the dummy variable
+=======
+ def process_line(self,raw_data,trail_number):
+        """ Takes a line of raw gps data and returns latitude,longitude and timestamp """
+
+        line= raw_data.split(',')
+        #print line
+        latitude, longitude, timestamp = line[0],line[1], line[2].split()[0]
+        return latitude,longitude, timestamp,trail_number
+>>>>>>> fb1fe9a61172b38965df6d38b0cd0121d976e86f
