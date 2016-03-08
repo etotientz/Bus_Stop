@@ -15,17 +15,7 @@ local_group_leader=[]
 
 input_file= open(file_name,'r')
 temp= input_file.readlines()[1:]
-"""for i in temp:
-    trailpoint.append(i)
-time_stamp = temp[0].split()[0].split(',')
-time = [int(i) for i in time_stamp[-1].split(':')]
-hr,minu,sec=time[0],time[1],time[2]
-for i in temp:
-        each_line = i
-        line = each_line.split(',')
-        time_stamp = line[2].split()[0]
-        time = [int(j) for j in time_stamp.split(':')]
-        trailpoint.append(each_line)"""
+
         
      
 def process_line(raw_data):
@@ -71,7 +61,7 @@ def get_zero_speed_data():
         #for each point in the zero_speed_data list
         for each_point in zero_speed_data[1:]:
             #get distance between the current_point and each_point
-            distance= dist(float(current_point[0]),float(current_point[1]),float(each_point[0]),,float(each_point[1]))
+            distance= dist((current_point[0]),(current_point[1]),(each_point[0]),(each_point[1]))
             
             if distance > DISTANCE_THRESHOLD:
                 #create a new group
