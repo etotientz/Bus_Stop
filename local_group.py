@@ -45,7 +45,7 @@ def get_zero_speed_data():
 
 
 
-        def get_local_groups(DISTANCE_THRESHOLD):
+def get_local_groups(DISTANCE_THRESHOLD):
         """
         assign local group number to each point
         """
@@ -74,7 +74,7 @@ def get_zero_speed_data():
             current_point= each_point #assign each_point to the current_point
 
 
-        def get_local_group_leaders():
+def get_local_group_leaders():
         
         """ get all of the local group leader points for all groups in a trail
             we store the group leader points for a trail in local_group_leader[]
@@ -108,7 +108,7 @@ def get_zero_speed_data():
                 group.append(each_point) #add the current point to the new group
             local_group_data.pop() # removing the dummy variable
 
-        def get_group_leader(group):
+def get_group_leader(group):
         """ returns the group_leader point for a particular group of points"""
        
         if group == []:
