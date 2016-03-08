@@ -126,15 +126,10 @@ def get_zero_speed_data():
             wait_per_distance.append(temp)  #append temp to the list
             total_wait_time+=wait_time 
         
-        max_index=0
-
         max_wait_per_distance= max(wait_per_distance) #get the maximum value from the list
  
         #get the index of the point having maximum wait_per_distance
-        for index in xrange(0,len(wait_per_distance)):
-           if max_wait_per_distance == wait_per_distance[index]:
-               max_index= index
-               break
+        max_index=wait_per_distance.index(max_wait_per_distance)
 
         group[max_index][3]= total_wait_time  #replace 'count' field with total_wait_time.
 
